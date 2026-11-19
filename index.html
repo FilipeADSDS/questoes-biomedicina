@@ -285,6 +285,39 @@ header.top{align-items:center}
 .temas-nota{margin:0;font-size:14px;color:var(--muted)}
 .foto-box{display:flex;gap:14px;align-items:center;border:1.5px dashed var(--line);border-radius:12px;padding:10px}
 .foto-box img{width:96px;height:96px;object-fit:cover;border-radius:8px;border:1px solid var(--line)}
+
+/* ===== Tema de gatinhos (liga/desliga no topo; cor continua roxa) ===== */
+:root{ --paw:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cellipse%20cx%3D%2712%27%20cy%3D%2716.2%27%20rx%3D%275.6%27%20ry%3D%274.6%27/%3E%3Cellipse%20cx%3D%274.9%27%20cy%3D%2710.2%27%20rx%3D%272.3%27%20ry%3D%272.9%27%20transform%3D%27rotate%28-20%204.9%2010.2%29%27/%3E%3Cellipse%20cx%3D%279.2%27%20cy%3D%275.6%27%20rx%3D%272.3%27%20ry%3D%273%27/%3E%3Cellipse%20cx%3D%2714.8%27%20cy%3D%275.6%27%20rx%3D%272.3%27%20ry%3D%273%27/%3E%3Cellipse%20cx%3D%2719.1%27%20cy%3D%2710.2%27%20rx%3D%272.3%27%20ry%3D%272.9%27%20transform%3D%27rotate%2820%2019.1%2010.2%29%27/%3E%3C/svg%3E"); }
+.gatos-btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:999px;padding:6px 14px 6px 10px;cursor:pointer;font-size:14px;font-weight:600}
+.gatos-btn svg{width:22px;height:22px;fill:currentColor}
+.gatos-btn[aria-pressed="true"]{color:var(--accent);border-color:var(--accent);background:var(--accent-soft)}
+.top-ctrl{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.gato-espia,.rastro,.gato-dorme{display:none}
+html.gatos .gato-espia{display:block;position:absolute;right:36px;bottom:calc(100% - 9px);width:118px;height:62px;pointer-events:none;z-index:2}
+html.gatos .tabs{position:relative;margin-top:44px}
+html.gatos .gato-espia .olho{transform-box:fill-box;transform-origin:center;animation:piscar 7s infinite}
+@keyframes piscar{0%,94%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
+html.gatos header.top{position:relative}
+html.gatos .rastro{display:block;position:absolute;right:0;bottom:-40px;width:220px;height:60px;pointer-events:none;opacity:.16;color:var(--accent)}
+html.gatos .rastro i{position:absolute;width:16px;height:16px;background:currentColor;-webkit-mask:var(--paw) center/contain no-repeat;mask:var(--paw) center/contain no-repeat}
+/* números das etapas com orelhinhas */
+html.gatos .etapa > .num::before,html.gatos .etapa > .num::after{content:"";position:absolute;top:-5px;width:15px;height:15px;background:var(--accent);clip-path:polygon(50% 0,100% 100%,0 100%);z-index:-1}
+html.gatos .etapa > .num::before{left:3px;transform:rotate(-24deg)}
+html.gatos .etapa > .num::after{right:3px;transform:rotate(24deg)}
+html.gatos .etapa > .num{z-index:0}
+/* patinha no lugar do ✓ */
+html.gatos .subj .check{font-size:0}
+html.gatos .subj[aria-pressed="true"] .check::after{content:"";width:16px;height:16px;background:var(--card);-webkit-mask:var(--paw) center/contain no-repeat;mask:var(--paw) center/contain no-repeat}
+html.gatos .chip[aria-pressed="true"]::before{content:"";display:inline-block;width:13px;height:13px;background:currentColor;-webkit-mask:var(--paw) center/contain no-repeat;mask:var(--paw) center/contain no-repeat}
+/* trilha da rodada: patinha na pergunta atual */
+html.gatos .track i{position:relative}
+html.gatos .track i.cur::after{content:"";position:absolute;left:50%;top:-17px;width:14px;height:14px;transform:translateX(-50%);background:var(--accent);-webkit-mask:var(--paw) center/contain no-repeat;mask:var(--paw) center/contain no-repeat}
+html.gatos .qbar{padding-top:6px}
+/* gato dormindo no fim da rodada */
+html.gatos #summary > .panel:first-child{position:relative}
+html.gatos .gato-dorme{display:block;position:absolute;right:18px;top:-30px;width:112px;height:58px;pointer-events:none}
+@media (max-width:560px){ html.gatos .gato-espia{right:16px;width:96px;height:50px} html.gatos .tabs{margin-top:36px} html.gatos .rastro{display:none} html.gatos .gato-dorme{width:84px;height:44px;top:-24px} }
+@media (prefers-reduced-motion: reduce){ html.gatos .gato-espia .olho{animation:none} }
 .hidden{display:none !important}
 @media (max-width:480px){ .qtext{font-size:19px} .count-big{font-size:46px} .vf{grid-template-columns:1fr} }
 </style>
@@ -296,14 +329,29 @@ header.top{align-items:center}
       <h1>Questões de Biomedicina</h1>
       <p>Perguntas tiradas dos slides e PDFs das aulas, das mais fáceis às mais difíceis.</p>
     </div>
-    <div class="themes" role="group" aria-label="Cor da tela" id="themes">
-      <button type="button" data-v="claro">Tela clara</button>
-      <button type="button" data-v="escuro">Tela escura</button>
-      <button type="button" data-v="auto">Automática</button>
+    <div class="top-ctrl">
+      <div class="themes" role="group" aria-label="Cor da tela" id="themes">
+        <button type="button" data-v="claro">Tela clara</button>
+        <button type="button" data-v="escuro">Tela escura</button>
+        <button type="button" data-v="auto">Automática</button>
+      </div>
+      <button type="button" class="gatos-btn" id="gatosBtn" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 3l4.2 4.1A9 9 0 0 1 12 6.4a9 9 0 0 1 3.8.7L20 3v8.3c.6 1 .9 2.1.9 3.2C20.9 19 16.9 21.5 12 21.5S3.1 19 3.1 14.5c0-1.1.3-2.2.9-3.2V3z"/></svg>Gatinhos</button>
     </div>
+    <div class="rastro" aria-hidden="true"><i style="left:6px;top:40px;transform:rotate(62deg)"></i><i style="left:40px;top:24px;transform:rotate(70deg)"></i><i style="left:78px;top:34px;transform:rotate(64deg)"></i><i style="left:114px;top:16px;transform:rotate(72deg)"></i><i style="left:152px;top:26px;transform:rotate(66deg)"></i><i style="left:190px;top:8px;transform:rotate(74deg)"></i></div>
   </header>
 
   <nav class="tabs" role="tablist" aria-label="Seções">
+    <svg class="gato-espia" viewBox="0 0 120 64" aria-hidden="true">
+      <polygon points="27,34 31,3 53,21" fill="var(--accent)"/><polygon points="93,34 89,3 67,21" fill="var(--accent)"/>
+      <polygon points="32,26 33.5,11 45,20" fill="var(--accent-soft)"/><polygon points="88,26 86.5,11 75,20" fill="var(--accent-soft)"/>
+      <ellipse cx="60" cy="44" rx="35" ry="27" fill="var(--accent)"/>
+      <g class="olho"><ellipse cx="47" cy="40" rx="6" ry="7" fill="var(--card)"/><ellipse cx="48" cy="41" rx="2.4" ry="5" fill="#1b1430"/></g>
+      <g class="olho"><ellipse cx="73" cy="40" rx="6" ry="7" fill="var(--card)"/><ellipse cx="72" cy="41" rx="2.4" ry="5" fill="#1b1430"/></g>
+      <path d="M56.5 49h7l-3.5 3.6z" fill="#f3a5c6"/>
+      <g stroke="var(--card)" stroke-width="1.3" stroke-linecap="round" opacity=".75"><path d="M40 50l-14-2M40 53l-14 2M80 50l14-2M80 53l14 2"/></g>
+      <ellipse cx="34" cy="62" rx="12" ry="7" fill="var(--accent)" stroke="var(--card)" stroke-width="2"/><ellipse cx="86" cy="62" rx="12" ry="7" fill="var(--accent)" stroke="var(--card)" stroke-width="2"/>
+      <g stroke="var(--card)" stroke-width="1.3" stroke-linecap="round"><path d="M30 58v5M38 58v5M82 58v5M90 58v5"/></g>
+    </svg>
     <button type="button" role="tab" id="tabEstudar" aria-selected="true">Estudar por matéria</button>
     <button type="button" role="tab" id="tabCasos" aria-selected="false">Casos especiais<span class="count" id="casosCount"></span></button>
   </nav>
@@ -400,6 +448,15 @@ header.top{align-items:center}
   <!-- RESUMO -->
   <section id="summary" class="hidden" style="flex-direction:column;gap:16px">
     <div class="panel">
+      <svg class="gato-dorme" viewBox="0 0 120 62" aria-hidden="true">
+        <path d="M18 54c-12 0-14-14-2-16" fill="none" stroke="var(--accent)" stroke-width="7" stroke-linecap="round"/>
+        <ellipse cx="62" cy="44" rx="44" ry="17" fill="var(--accent)"/>
+        <polygon points="78,30 82,10 93,25" fill="var(--accent)"/><polygon points="98,31 106,13 109,33" fill="var(--accent)"/>
+        <ellipse cx="94" cy="40" rx="17" ry="14" fill="var(--accent)"/>
+        <g fill="none" stroke="var(--card)" stroke-width="1.8" stroke-linecap="round"><path d="M86 40q3 3 6 0M98 40q3 3 6 0"/></g>
+        <text x="108" y="14" font-size="12" font-weight="700" fill="var(--accent)" opacity=".7" font-family="var(--font-display)">z</text>
+        <text x="114" y="6" font-size="9" font-weight="700" fill="var(--accent)" opacity=".5" font-family="var(--font-display)">z</text>
+      </svg>
       <p class="label">Rodada concluída</p>
       <p style="margin:0;font-size:19px" id="sumHead"></p>
       <ul class="sumlist" id="sumList"></ul>
@@ -1919,6 +1976,9 @@ function aplicarTema(v){
   document.querySelectorAll("#themes button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === v)));
 }
 aplicarTema(store.get("qb_tema", "claro"));
+function aplicarGatos(on){ document.documentElement.classList.toggle("gatos", on); $("#gatosBtn").setAttribute("aria-pressed", String(on)); $("#gatosBtn").title = on ? "Desligar o tema de gatinhos" : "Ligar o tema de gatinhos"; }
+aplicarGatos(store.get("qb_gatos", true));
+$("#gatosBtn").addEventListener("click", () => { const on = !document.documentElement.classList.contains("gatos"); store.set("qb_gatos", on); aplicarGatos(on); });
 document.querySelectorAll("#themes button").forEach(b => b.addEventListener("click", () => { store.set("qb_tema", b.dataset.v); aplicarTema(b.dataset.v); }));
 
 /* ---------- casos especiais ---------- */
